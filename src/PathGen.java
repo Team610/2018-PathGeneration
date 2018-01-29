@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import constants.GenerationConstants;
 import constants.RobotConstants;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -39,6 +40,11 @@ public class PathGen {
 		writeRightTraj();
 	}
 	
+	public void writeTraj(String pathName) throws IOException {
+		writeLeftTraj(pathName);
+		writeRightTraj(pathName);
+	}
+	
 	public void writeLeftTraj() throws IOException {
 		Segment segment;
 		File myFile = new File("pathL.txt");
@@ -70,6 +76,47 @@ public class PathGen {
 			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) +   ", " + time + "},");
 		}
 		writer.write("};");
+		writer.close();
+	}
+	
+	public void writeLeftTraj(String pathName) throws IOException {
+		Segment segment;
+		File myFile = new File(GenerationConstants.generationOutput + pathName +"Left.java");
+		FileWriter writer = new FileWriter(myFile);
+		writer.write(GenerationConstants.generationOutput);
+		writer.write("public class " + pathName + "Left { ");
+		writer.write(GenerationConstants.variableName);
+		
+		double l = 0;
+		for(int i=0; i<leftTrajectory.length(); i++) {
+			segment = leftTrajectory.get(i);
+			
+			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
+			
+			
+			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) + ", " + time + "},");
+			l++;
+		}
+		System.out.println(l);
+		writer.write("};}");
+		writer.close();
+	}
+	
+	public void writeRightTraj(String pathName) throws IOException {
+		Segment segment;
+		File myFileTwo = new File(GenerationConstants.generationOutput + pathName + "Right.java");
+		FileWriter writer = new FileWriter(myFileTwo);
+		writer.write(GenerationConstants.generationOutput);
+		writer.write("public class " + pathName + "Right { ");
+		writer.write(GenerationConstants.variableName);
+		
+		for(int i=0; i<rightTrajectory.length(); i++) {
+			segment = rightTrajectory.get(i);
+			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
+			
+			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) +   ", " + time + "},");
+		}
+		writer.write("};}");
 		writer.close();
 	}
 	

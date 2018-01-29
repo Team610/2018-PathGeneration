@@ -1,21 +1,17 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 
-import constants.RobotConstants;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
-import jaci.pathfinder.followers.EncoderFollower;
 
 public class Main {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		Waypoint[] points;
 		Trajectory left, right;
-		
 		
     	points = new Waypoint[] {
     			new Waypoint(0,0, Pathfinder.d2r(0)),
@@ -28,6 +24,10 @@ public class Main {
     			new Waypoint(-1.26, 1.26, Pathfinder.d2r(-90)),
     			new Waypoint(0,0, Pathfinder.d2r(0))
     	};
+    	
+    	Scanner sc = new Scanner(System.in);
+    	System.out.println("path name: ");
+    	String pathName = sc.nextLine();
     	
     	PathGen curPath = new PathGen();
     	curPath.generateTrajectory(points);
@@ -45,7 +45,7 @@ public class Main {
     		routine.run(left.get(i).x, left.get(i).y, right.get(i).x, right.get(i).y, points);
     	}
     	
-    	curPath.writeTraj();
+    	curPath.writeTraj(pathName);
     	
 	}
 

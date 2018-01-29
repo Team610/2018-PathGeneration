@@ -22,25 +22,31 @@ public class DrawPath extends JPanel {
 		g2d.fillOval(500-(int)yRight, 500-(int)xRight, 10, 10);
 		g2d.setColor(Color.GREEN);
 		for(Waypoint i:targets) {
-			int x = (int)(i.x * 50)+500; int y = (int)(i.y * 50)+500;
-			g2d.fillOval(1000-y, 1000-x, 15, 15);
+			int x = metersToPixels(i.x)+500; //+500 is for centering the points on the 1000 x 1000 display
+			int y = metersToPixels(i.y)+500;
+			g2d.fillOval(1000-y, 1000-x, 15, 15); //1000 - makes the bottom corner the center of the screen 
 		}
 		
 		g2d.setColor(Color.BLACK);
 		
-		for(int i = 0; i<1000/50; i++) {
-			g2d.drawLine(i*50, 0, i*50, 1000);
+		for(int i = 0; i<1000/50; i++) { //gridlines for reference
+			g2d.drawLine(i*50, 0, i*50, 1000); 
 			g2d.drawLine(0, i*50, 1000, i*50);
 		}
 
 	}
 	public void run(double xPosLeft,double yPosLeft, double xPosRight, double yPosRight, Waypoint[] points) throws InterruptedException {
 		Thread.sleep(5);
-		xLeft = xPosLeft*50; yLeft = yPosLeft*50;
-		xRight = xPosRight*50; yRight = yPosRight*50;
+		xLeft = metersToPixels(xPosLeft); yLeft = metersToPixels(yPosLeft);
+		xRight = metersToPixels(xPosRight); yRight = metersToPixels(yPosRight);
 		targets = points;
 		repaint();
 		
+	}
+	
+	
+	public int metersToPixels(double meters) {
+		return (int)(meters*50); //50 is a scaling factor just to make the points more visible
 	}
 	
 	
