@@ -83,7 +83,7 @@ public class PathGen {
 		Segment segment;
 		File myFile = new File(GenerationConstants.generationOutput + pathName +"Left.java");
 		FileWriter writer = new FileWriter(myFile);
-		writer.write(GenerationConstants.generationOutput);
+		writer.write(GenerationConstants.packageLine);
 		writer.write("public class " + pathName + "Left { ");
 		writer.write(GenerationConstants.variableName);
 		
@@ -106,7 +106,7 @@ public class PathGen {
 		Segment segment;
 		File myFileTwo = new File(GenerationConstants.generationOutput + pathName + "Right.java");
 		FileWriter writer = new FileWriter(myFileTwo);
-		writer.write(GenerationConstants.generationOutput);
+		writer.write(GenerationConstants.packageLine);
 		writer.write("public class " + pathName + "Right { ");
 		writer.write(GenerationConstants.variableName);
 		

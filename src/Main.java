@@ -14,15 +14,10 @@ public class Main {
 		Trajectory left, right;
 		
     	points = new Waypoint[] {
-    			new Waypoint(0,0, Pathfinder.d2r(0)),
-    			new Waypoint(1.26, 1.26, Pathfinder.d2r(90)),
-    			new Waypoint(2.54, 2.54, Pathfinder.d2r(0)),
-    			new Waypoint(2.54+1.26, 1.26, Pathfinder.d2r(-90)),
-    			new Waypoint(2.54, 0, Pathfinder.d2r(180)),
-    			new Waypoint(1.26, 1.26, Pathfinder.d2r(90)),
-    			new Waypoint(0,2.54, Pathfinder.d2r(180)),
-    			new Waypoint(-1.26, 1.26, Pathfinder.d2r(-90)),
-    			new Waypoint(0,0, Pathfinder.d2r(0))
+    			new Waypoint(0,inchesToMeters(162), Pathfinder.d2r(0)),
+    			new Waypoint(inchesToMeters(84), inchesToMeters(244), Pathfinder.d2r(15)),
+    			new Waypoint(inchesToMeters(150), inchesToMeters(302), Pathfinder.d2r(0)),
+    			new Waypoint(inchesToMeters(302), inchesToMeters(268), Pathfinder.d2r(315)),   
     	};
     	
     	Scanner sc = new Scanner(System.in);
@@ -36,17 +31,20 @@ public class Main {
     	
     	DrawPath routine = new DrawPath();
     	JFrame frame = new JFrame("RobotPath");
-    	frame.setSize(1000,1000); //50 pixels = 1m
+    	frame.setSize(435,903); //accounts for menu bar at the top + field
     	frame.add(routine);
     	frame.setVisible(true);
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	
-    	for (int i = 0; i<left.length();i++) {
-    		routine.run(left.get(i).x, left.get(i).y, right.get(i).x, right.get(i).y, points);
-    	}
+    	
+    	routine.run(left, right, points);
     	
     	curPath.writeTraj(pathName);
     	
+	}
+	
+	public static double inchesToMeters(double inches) {
+		return inches*1.0/39.37;
 	}
 
 }
