@@ -94,7 +94,7 @@ public class PathGen {
 			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
 			
 			
-			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) + ", " + time + "},");
+			writer.write("{" + (position*39.37) + ", " + (velocity*39.37) + ", " + (acceleration*39.37) +  ", " + time + "},");
 			l++;
 		}
 		System.out.println(l);
@@ -114,7 +114,7 @@ public class PathGen {
 			segment = rightTrajectory.get(i);
 			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
 			
-			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) +   ", " + time + "},");
+			writer.write("{" + (position * 39.37) + ", " + (velocity * 39.37) + ", " + (acceleration*39.37) + ", " + time + "},");
 		}
 		writer.write("};}");
 		writer.close();
