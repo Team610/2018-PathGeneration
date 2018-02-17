@@ -27,9 +27,9 @@ public class DrawPath extends JPanel {
 		*/
 		for (int i=0; i<left.length(); i++) {
 			g2d.setColor(Color.blue);
-			g2d.fillOval(metersToPixels(left.segments[i].y), 854 - metersToPixels(left.segments[i].x), 10, 10); //height is actually 864 but need 10 pixel offset
+			g2d.fillOval(435-metersToPixels(left.segments[i].y), 854 - metersToPixels(left.segments[i].x), 10, 10); //height is actually 864 but need 10 pixel offset
 			g2d.setColor(Color.red);
-			g2d.fillOval(metersToPixels(right.segments[i].y), 854 - metersToPixels(right.segments[i].x), 10, 10);
+			g2d.fillOval(435-metersToPixels(right.segments[i].y), 854 - metersToPixels(right.segments[i].x), 10, 10);
 		}
 		
 		g2d.setColor(Color.GREEN);
@@ -37,7 +37,7 @@ public class DrawPath extends JPanel {
 			//x and y are swapped because of the pathfinder library, normally x is forward and y is side to side
 			int x = metersToPixels(i.y); //+ is for centering on 435 pixels
 			int y = metersToPixels(i.x);
-			g2d.fillOval(x, 854-y, 15, 15); //854 - makes the bottom corner the 0,0 
+			g2d.fillOval(435-x, 854-y, 15, 15); //854 - makes the bottom corner the 0,0 
 		}
 		/*
 		g2d.setColor(Color.BLACK);

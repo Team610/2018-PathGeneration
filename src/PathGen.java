@@ -18,7 +18,7 @@ public class PathGen {
 	}
 	
 	public void generateTrajectory(Waypoint[] points) {
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.01, RobotConstants.maxVelocity, RobotConstants.maxAcceleration, 160);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.01, RobotConstants.maxVelocity, RobotConstants.maxAcceleration, RobotConstants.maxJerk);
 		Trajectory trajectory = Pathfinder.generate(points, config);														//= 10ms
 	
 		TankModifier modifier = new TankModifier(trajectory).modify(RobotConstants.robotWidth);

@@ -15,10 +15,13 @@ public class Main {
 		
     	points = new Waypoint[] {
     			new Waypoint(0,inchesToMeters(162), Pathfinder.d2r(0)),
-    			new Waypoint(inchesToMeters(84), inchesToMeters(244), Pathfinder.d2r(15)),
-    			new Waypoint(inchesToMeters(150), inchesToMeters(302), Pathfinder.d2r(0)),
-    			new Waypoint(inchesToMeters(302), inchesToMeters(268), Pathfinder.d2r(315)),   
+    			new Waypoint(inchesToMeters(100), inchesToMeters(220), Pathfinder.d2r(0)),   
     	};
+    	
+    	//switch left: p1(0,162,0) p2(106,108,0) //
+    	    	//right turn: p1(0,0,0) p2(100,100,90)
+    	
+    	//switch right: p1(0,162,0) p2(106,216,0)
     	
     	Scanner sc = new Scanner(System.in);
     	System.out.println("path name: ");
