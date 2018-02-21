@@ -10,98 +10,119 @@ import jaci.pathfinder.Trajectory.Segment;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
 
-
-
 public class PathGen {
 	private Trajectory leftTrajectory, rightTrajectory;
+	private boolean isReversed = false;
+
 	public PathGen() {
 	}
-	
-	public void generateTrajectory(Waypoint[] points) {
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.01, RobotConstants.maxVelocity, RobotConstants.maxAcceleration, RobotConstants.maxJerk);
-		Trajectory trajectory = Pathfinder.generate(points, config);														//= 10ms
-	
+
+	public void generateTrajectory(Waypoint[] points, boolean isReversed) {
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
+				Trajectory.Config.SAMPLES_HIGH, 0.01, RobotConstants.maxVelocity, RobotConstants.maxAcceleration,
+				RobotConstants.maxJerk);
+		Trajectory trajectory = Pathfinder.generate(points, config); // = 10ms
+		this.isReversed = isReversed;
 		TankModifier modifier = new TankModifier(trajectory).modify(RobotConstants.robotWidth);
-	
-		leftTrajectory = modifier.getLeftTrajectory();
-		rightTrajectory = modifier.getRightTrajectory();
+		if (isReversed) {
+			leftTrajectory = modifier.getRightTrajectory();
+			rightTrajectory = modifier.getLeftTrajectory();
+		} else {
+			leftTrajectory = modifier.getLeftTrajectory();
+			rightTrajectory = modifier.getRightTrajectory();
+		}
 	}
-	
+
 	public Trajectory getLeftTraj() {
 		return leftTrajectory;
 	}
-	
+
 	public Trajectory getRightTraj() {
 		return rightTrajectory;
 	}
-	
+
 	public void writeTraj() throws IOException {
 		writeLeftTraj();
 		writeRightTraj();
 	}
-	
+
 	public void writeTraj(String pathName) throws IOException {
 		writeLeftTraj(pathName);
 		writeRightTraj(pathName);
 	}
-	
+
 	public void writeLeftTraj() throws IOException {
 		Segment segment;
 		File myFile = new File("pathL.txt");
 		FileWriter writer = new FileWriter(myFile);
 		double l = 0;
-		for(int i=0; i<leftTrajectory.length(); i++) {
+		for (int i = 0; i < leftTrajectory.length(); i++) {
 			segment = leftTrajectory.get(i);
-			
-			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
-			
-			
-			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) + ", " + time + "},");
+
+			double position = round(segment.position, 5);
+			double velocity = round(segment.velocity, 5);
+			double time = segment.dt;
+			double acceleration = segment.acceleration;
+
+			writer.write("{" + position / (RobotConstants.wheelCirc) + ", " + velocity * 60 / (RobotConstants.wheelCirc)
+					+ ", " + time + "},");
 			l++;
 		}
 		System.out.println(l);
 		writer.write("};");
 		writer.close();
 	}
-	
+
 	public void writeRightTraj() throws IOException {
 		Segment segment;
 		File myFileTwo = new File("pathR.txt");
 		FileWriter writer = new FileWriter(myFileTwo);
 		System.out.println("RightSide");
-		for(int i=0; i<rightTrajectory.length(); i++) {
+		for (int i = 0; i < rightTrajectory.length(); i++) {
 			segment = rightTrajectory.get(i);
-			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
-			
-			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) +   ", " + time + "},");
+			double position = round(segment.position, 5);
+			double velocity = round(segment.velocity, 5);
+			double time = segment.dt;
+			double acceleration = segment.acceleration;
+
+			writer.write("{" + position / (RobotConstants.wheelCirc) + ", " + velocity * 60 / (RobotConstants.wheelCirc)
+					+ ", " + time + "},");
 		}
 		writer.write("};");
 		writer.close();
 	}
-	
+
 	public void writeLeftTraj(String pathName) throws IOException {
 		Segment segment;
-		File myFile = new File(GenerationConstants.generationOutput + pathName +"Left.java");
+		File myFile = new File(GenerationConstants.generationOutput + pathName + "Left.java");
 		FileWriter writer = new FileWriter(myFile);
 		writer.write(GenerationConstants.packageLine);
 		writer.write("public class " + pathName + "Left { ");
 		writer.write(GenerationConstants.variableName);
-		
+
 		double l = 0;
-		for(int i=0; i<leftTrajectory.length(); i++) {
+		for (int i = 0; i < leftTrajectory.length(); i++) {
 			segment = leftTrajectory.get(i);
-			
-			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
-			
-			
-			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) + ", " + time + "},");
+
+			double position = round(segment.position, 5);
+			double velocity = round(segment.velocity, 5);
+			double time = segment.dt;
+			double acceleration = segment.acceleration;
+
+			if(isReversed) {
+				writer.write("{" + -position / (RobotConstants.wheelCirc) + ", " + -velocity * 60 / (RobotConstants.wheelCirc)
+						+ ", " + time + "},");
+			}else {
+				writer.write("{" + position / (RobotConstants.wheelCirc) + ", " + velocity * 60 / (RobotConstants.wheelCirc)
+					+ ", " + time + "},");
+			}
 			l++;
 		}
 		System.out.println(l);
 		writer.write("};}");
 		writer.close();
 	}
-	
+
 	public void writeRightTraj(String pathName) throws IOException {
 		Segment segment;
 		File myFileTwo = new File(GenerationConstants.generationOutput + pathName + "Right.java");
@@ -109,21 +130,29 @@ public class PathGen {
 		writer.write(GenerationConstants.packageLine);
 		writer.write("public class " + pathName + "Right { ");
 		writer.write(GenerationConstants.variableName);
-		
-		for(int i=0; i<rightTrajectory.length(); i++) {
+
+		for (int i = 0; i < rightTrajectory.length(); i++) {
 			segment = rightTrajectory.get(i);
-			double position = round(segment.position,5); double velocity = round(segment.velocity,5); double time = segment.dt; double acceleration = segment.acceleration;
-			
-			writer.write("{" + position/(RobotConstants.wheelCirc) + ", " + velocity*60/(RobotConstants.wheelCirc) +   ", " + time + "},");
+			double position = round(segment.position, 5);
+			double velocity = round(segment.velocity, 5);
+			double time = segment.dt;
+			double acceleration = segment.acceleration;
+
+			if(isReversed) {
+				writer.write("{" + -position / (RobotConstants.wheelCirc) + ", " + -velocity * 60 / (RobotConstants.wheelCirc)
+						+ ", " + time + "},");
+			}else {
+				writer.write("{" + position / (RobotConstants.wheelCirc) + ", " + velocity * 60 / (RobotConstants.wheelCirc)
+					+ ", " + time + "},");
+			}
 		}
 		writer.write("};}");
 		writer.close();
 	}
-	
+
 	public double round(double num, int decimalPlaces) {
-		int newNum = (int)(num*Math.pow(10, decimalPlaces));
-		return newNum/Math.pow(10, decimalPlaces);
+		int newNum = (int) (num * Math.pow(10, decimalPlaces));
+		return newNum / Math.pow(10, decimalPlaces);
 	}
-	
 
 }
