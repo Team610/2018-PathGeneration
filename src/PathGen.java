@@ -12,25 +12,22 @@ import jaci.pathfinder.modifiers.TankModifier;
 
 public class PathGen {
 	private Trajectory leftTrajectory, rightTrajectory;
-	private boolean isReversed = false;
+	private boolean isReversedR = false, isReversedL = false;
 
 	public PathGen() {
 	}
 
-	public void generateTrajectory(Waypoint[] points, boolean isReversed) {
+	public void generateTrajectory(Waypoint[] points, boolean isReversedL, boolean isReversedR) {
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
 				Trajectory.Config.SAMPLES_HIGH, 0.01, RobotConstants.maxVelocity, RobotConstants.maxAcceleration,
 				RobotConstants.maxJerk);
-		Trajectory trajectory = Pathfinder.generate(points, config); // = 10ms
-		this.isReversed = isReversed;
+		Trajectory trajectory = Pathfinder.generate(points, config); // = 20ms
+		this.isReversedL = isReversedL;
+		this.isReversedR = isReversedR;
 		TankModifier modifier = new TankModifier(trajectory).modify(RobotConstants.robotWidth);
-		if (isReversed) {
-			leftTrajectory = modifier.getRightTrajectory();
-			rightTrajectory = modifier.getLeftTrajectory();
-		} else {
-			leftTrajectory = modifier.getLeftTrajectory();
-			rightTrajectory = modifier.getRightTrajectory();
-		}
+		
+		leftTrajectory = modifier.getLeftTrajectory();
+		rightTrajectory = modifier.getRightTrajectory();
 	}
 
 	public Trajectory getLeftTraj() {
@@ -94,10 +91,17 @@ public class PathGen {
 
 	public void writeLeftTraj(String pathName) throws IOException {
 		Segment segment;
-		File myFile = new File(GenerationConstants.generationOutput + pathName + "Left.java");
+		File myFile;
+		if(isReversedL && isReversedR)
+			myFile = new File(GenerationConstants.generationOutput + pathName + "_R.java");
+		else
+			myFile = new File(GenerationConstants.generationOutput + pathName + "_L.java");
 		FileWriter writer = new FileWriter(myFile);
 		writer.write(GenerationConstants.packageLine);
-		writer.write("public class " + pathName + "Left { ");
+		if(isReversedL && isReversedR)
+			writer.write("public class " + pathName + "_R { ");
+		else
+			writer.write("public class " + pathName + "_L { ");
 		writer.write(GenerationConstants.variableName);
 
 		double l = 0;
@@ -109,7 +113,7 @@ public class PathGen {
 			double time = segment.dt;
 			double acceleration = segment.acceleration;
 
-			if(isReversed) {
+			if(isReversedL) {
 				writer.write("{" + -position / (RobotConstants.wheelCirc) + ", " + -velocity * 60 / (RobotConstants.wheelCirc)
 						+ ", " + time + "},");
 			}else {
@@ -125,10 +129,17 @@ public class PathGen {
 
 	public void writeRightTraj(String pathName) throws IOException {
 		Segment segment;
-		File myFileTwo = new File(GenerationConstants.generationOutput + pathName + "Right.java");
+		File myFileTwo;
+		if(isReversedL && isReversedR)
+			myFileTwo = new File(GenerationConstants.generationOutput + pathName + "_L.java");
+		else
+			myFileTwo = new File(GenerationConstants.generationOutput + pathName + "_R.java");
 		FileWriter writer = new FileWriter(myFileTwo);
 		writer.write(GenerationConstants.packageLine);
-		writer.write("public class " + pathName + "Right { ");
+		if(isReversedL && isReversedR)
+			writer.write("public class " + pathName + "_L { ");
+		else
+			writer.write("public class " + pathName + "_R { ");
 		writer.write(GenerationConstants.variableName);
 
 		for (int i = 0; i < rightTrajectory.length(); i++) {
@@ -138,7 +149,7 @@ public class PathGen {
 			double time = segment.dt;
 			double acceleration = segment.acceleration;
 
-			if(isReversed) {
+			if(isReversedR) {
 				writer.write("{" + -position / (RobotConstants.wheelCirc) + ", " + -velocity * 60 / (RobotConstants.wheelCirc)
 						+ ", " + time + "},");
 			}else {
