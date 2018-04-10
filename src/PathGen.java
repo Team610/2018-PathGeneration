@@ -112,13 +112,14 @@ public class PathGen {
 			double velocity = round(segment.velocity, 5);
 			double time = segment.dt;
 			double acceleration = segment.acceleration;
+			double heading = Pathfinder.r2d(segment.heading);
 
 			if(isReversedL) {
 				writer.write("{" + -position / (RobotConstants.wheelCirc) + ", " + -velocity * 60 / (RobotConstants.wheelCirc)
-						+ ", " + time + "},");
+						+ ", " + heading + ", " + time + "},");
 			}else {
 				writer.write("{" + position / (RobotConstants.wheelCirc) + ", " + velocity * 60 / (RobotConstants.wheelCirc)
-					+ ", " + time + "},");
+					+ ", " + heading + ", " + time + "},");
 			}
 			l++;
 		}
@@ -148,13 +149,14 @@ public class PathGen {
 			double velocity = round(segment.velocity, 5);
 			double time = segment.dt;
 			double acceleration = segment.acceleration;
+			double heading = Pathfinder.r2d(segment.heading);
 
 			if(isReversedR) {
 				writer.write("{" + -position / (RobotConstants.wheelCirc) + ", " + -velocity * 60 / (RobotConstants.wheelCirc)
-						+ ", " + time + "},");
+						+ ", " + heading + ", " + time + "},");
 			}else {
 				writer.write("{" + position / (RobotConstants.wheelCirc) + ", " + velocity * 60 / (RobotConstants.wheelCirc)
-					+ ", " + time + "},");
+					+ ", " + heading + ", " + time + "},");
 			}
 		}
 		writer.write("};}");

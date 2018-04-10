@@ -70,12 +70,13 @@ public class Main {
     			new Waypoint(inchesToMeters(0),inchesToMeters(290), Pathfinder.d2r(0)),
     			new Waypoint(inchesToMeters(220),inchesToMeters(290), Pathfinder.d2r(0)),
     			*/
-    			//drive straight left scale
     			
+    			//drive straight left scale
+    			/*
     			new Waypoint(inchesToMeters(0),inchesToMeters(290), Pathfinder.d2r(0)),
     			new Waypoint(inchesToMeters(100),inchesToMeters(310), Pathfinder.d2r(0)),
     			new Waypoint(inchesToMeters(300),inchesToMeters(310), Pathfinder.d2r(0)),
-    			
+    			*/
     			
     			//left scale 90 turn
     			/*
@@ -84,10 +85,10 @@ public class Main {
     			*/
     			
     			//drive straight auto
-    			/*
-    			new Waypoint(inchesToMeters(0),inchesToMeters(290), Pathfinder.d2r(0)),
-    			new Waypoint(inchesToMeters(140),inchesToMeters(290), Pathfinder.d2r(0)),
-    			*/
+    			
+    			new Waypoint(inchesToMeters(0),inchesToMeters(250), Pathfinder.d2r(0)),
+    			new Waypoint(inchesToMeters(110),inchesToMeters(250), Pathfinder.d2r(0)), //110,320,90
+    			
 
     	};
     	
