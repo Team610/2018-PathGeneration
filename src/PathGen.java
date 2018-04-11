@@ -14,6 +14,7 @@ public class PathGen {
 	private Trajectory leftTrajectory, rightTrajectory;
 	private boolean isReversedR = false, isReversedL = false;
 
+	boolean localOutput = false;
 	public PathGen() {
 	}
 
@@ -105,11 +106,14 @@ public class PathGen {
 		writer.write(GenerationConstants.variableName);
 
 		double l = 0;
+		double maxVel = 0;
 		for (int i = 0; i < leftTrajectory.length(); i++) {
 			segment = leftTrajectory.get(i);
 
 			double position = round(segment.position, 5);
 			double velocity = round(segment.velocity, 5);
+			if(velocity>maxVel)
+				maxVel = velocity;
 			double time = segment.dt;
 			double acceleration = segment.acceleration;
 			double heading = Pathfinder.r2d(segment.heading);
@@ -125,6 +129,8 @@ public class PathGen {
 		}
 		System.out.println(l);
 		writer.write("};}");
+		writer.write("//max Velocity in native units: " + (maxVel*60/(RobotConstants.wheelCirc)*512.0/600.0)); //1024 should become 512 when we switch to actual robot
+		
 		writer.close();
 	}
 
@@ -143,10 +149,13 @@ public class PathGen {
 			writer.write("public class " + pathName + "_R { ");
 		writer.write(GenerationConstants.variableName);
 
+		double maxVel = 0;
 		for (int i = 0; i < rightTrajectory.length(); i++) {
 			segment = rightTrajectory.get(i);
 			double position = round(segment.position, 5);
 			double velocity = round(segment.velocity, 5);
+			if(velocity>maxVel)
+				maxVel = velocity;
 			double time = segment.dt;
 			double acceleration = segment.acceleration;
 			double heading = Pathfinder.r2d(segment.heading);
@@ -160,6 +169,7 @@ public class PathGen {
 			}
 		}
 		writer.write("};}");
+		writer.write("//max Velocity in native units: " + (maxVel*60/(RobotConstants.wheelCirc)*512.0/600.0)); //1024 should become 512 when we switch to actual robot
 		writer.close();
 	}
 
