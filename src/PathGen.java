@@ -22,7 +22,7 @@ public class PathGen {
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
 				Trajectory.Config.SAMPLES_HIGH, 0.01, RobotConstants.maxVelocity, RobotConstants.maxAcceleration,
 				RobotConstants.maxJerk);
-		Trajectory trajectory = Pathfinder.generate(points, config); // = 20ms
+		Trajectory trajectory = Pathfinder.generate(points, config);
 		this.isReversedL = isReversedL;
 		this.isReversedR = isReversedR;
 		TankModifier modifier = new TankModifier(trajectory).modify(RobotConstants.robotWidth);

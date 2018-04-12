@@ -111,9 +111,12 @@ public class Main {
     			*/
     			
     			//backup center right switch (TRMRSwitch)
-    			
+    			/*
     			new Waypoint(inchesToFeet(110),inchesToFeet(100), Pathfinder.d2r(0)),
     			new Waypoint(inchesToFeet(40),inchesToFeet(162), Pathfinder.d2r(0)),
+    			*/
+    			new Waypoint(inchesToFeet(0),inchesToFeet(150), Pathfinder.d2r(0)),
+    			new Waypoint(inchesToFeet(150),inchesToFeet(150), Pathfinder.d2r(0)),
     			
     	};
     	
